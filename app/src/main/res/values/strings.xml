@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">testTask4</string>
+    <string name="there_is_no_internet_connection">There is no internet connection</string>
+    <string name="try_agin">Try again</string>
+    <string name="working_with_get_request">Working with GET request</string>
+    <string name="there_are_no_users_yet">There are no users yet</string>
+    <string name="users">Users</string>
+    <string name="sign_up">Sign up</string>
+</resources>
