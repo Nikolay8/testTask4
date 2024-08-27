@@ -108,4 +108,7 @@ dependencies {
 
     // Coil
     implementation(libs.coil.compose)
+
+    // Image/Photo picker
+    implementation(libs.imagepicker)
 }

@@ -1,6 +1,7 @@
 package com.fly.testtask4.network.api
 
 import com.fly.testtask4.network.model.GetUsersResponse
+import com.fly.testtask4.network.model.PositionsResponse
 import com.fly.testtask4.network.model.SetUserRequest
 import okhttp3.ResponseBody
 import retrofit2.Response
@@ -25,4 +26,6 @@ interface ApiService {
         @Body body: SetUserRequest
     ): Response<ResponseBody>
 
+    @GET("positions")
+    suspend fun getPositions(): Response<PositionsResponse>
 }

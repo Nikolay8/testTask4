@@ -56,6 +56,7 @@ import com.fly.testtask4.ui.TestTaskViewModel
 import com.fly.testtask4.ui.theme.TestTask4Theme
 import com.fly.testtask4.ui.views.CustomBottomNavigation
 import com.fly.testtask4.ui.views.EmptyUsersListViews
+import com.fly.testtask4.ui.views.SignUpViews
 
 
 /**
@@ -76,6 +77,7 @@ fun UsersScreen(
     onNextButtonClicked: () -> Unit,
     onUsersClick: () -> Unit,
     onSignUpClick: () -> Unit,
+    uploadPhotoClick: () -> Unit,
     onErrorAction: () -> Unit,
     viewModel: TestTaskViewModel
 ) {
@@ -84,6 +86,10 @@ fun UsersScreen(
     val lifecycleOwner = LocalLifecycleOwner.current
     // Collect the UI state from the ViewModel
     val uiState by viewModel.uiState.collectAsState()
+
+    var isShowSignUpScreen by remember {
+        mutableStateOf(false)
+    }
 
     // State to keep track of the current page for pagination
     var page by remember {
@@ -157,19 +163,39 @@ fun UsersScreen(
         }
     }
 
+    Column {
+        Box(modifier = Modifier.weight(1f)) {
 
-    // Based on uiState show empty user list views or lazyList with users info
-    uiState.usersList.let {
-        if (it.isNotEmpty()) {
-            UserLazyList(
-                loading = loading,
-                listState = listState,
-                uiState = uiState,
-                onUsersClick = onUsersClick,
-                onSignUpClick = onSignUpClick
-            )
-        } else {
-            EmptyUsersListViews(onUsersClick = onUsersClick, onSignUpClick = onSignUpClick)
+            if (isShowSignUpScreen) {
+                SignUpViews(viewModel = viewModel, uploadPhotoAction = {
+                    uploadPhotoClick.invoke()
+                }, onErrorAction = {
+
+                })
+            } else {
+                // Based on uiState show empty user list views or lazyList with users info
+                uiState.usersList.let {
+                    if (it.isNotEmpty()) {
+                        UserLazyList(
+                            loading = loading,
+                            listState = listState,
+                            uiState = uiState,
+                            onUsersClick = onUsersClick,
+                            onSignUpClick = onSignUpClick
+                        )
+                    } else {
+                        EmptyUsersListViews()
+                    }
+                }
+            }
+        }
+
+        Box {
+            CustomBottomNavigation(onUsersClick = {
+                isShowSignUpScreen = false
+            }, onSignUpClick = {
+                isShowSignUpScreen = true
+            })
         }
     }
 }
@@ -238,8 +264,6 @@ fun UserLazyList(
                 )
             }
         }
-
-        CustomBottomNavigation(onUsersClick = onUsersClick, onSignUpClick = onSignUpClick)
     }
 }
 
@@ -354,8 +378,8 @@ fun UsersEmptyScreenPrev() {
                 position = "Manager"
             ), UserModel(
                 id = 30,
-                name = "test name",
-                email = "test@email.com",
+                name = "test name1",
+                email = "test1@email.com",
                 phone = "+38090606060",
                 positionId = 15515151,
                 registrationTimestamp = 1537777441,
@@ -370,6 +394,7 @@ fun UsersEmptyScreenPrev() {
             onNextButtonClicked = { },
             onUsersClick = {},
             onSignUpClick = {},
+            uploadPhotoClick = {},
             onErrorAction = {},
             viewModel = viewModel
         )

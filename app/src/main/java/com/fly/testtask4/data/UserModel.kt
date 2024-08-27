@@ -17,7 +17,7 @@ import kotlinx.parcelize.Parcelize
  * @property photo URL to the user's profile photo.
  */
 @Parcelize
-class UserModel(
+data class UserModel(
     val id: Int,
     val name: String,
     val email: String,

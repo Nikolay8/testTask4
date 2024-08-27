@@ -1,11 +1,11 @@
 package com.fly.testtask4.network.repository
 
-import android.content.Context
 import com.fly.testtask4.data.UserModel
 import com.fly.testtask4.network.RestAPIClient
 import com.fly.testtask4.network.Result
 import com.fly.testtask4.network.api.ApiService
 import com.fly.testtask4.network.model.GetUsersResponse
+import com.fly.testtask4.network.model.PositionsResponse
 import com.fly.testtask4.network.model.SetUserRequest
 import okhttp3.ResponseBody
 
@@ -24,6 +24,12 @@ class ApiRepositoryImpl(
                 token = "",
                 SetUserRequest(userModel = userModel)
             )
+        }
+    }
+
+    override suspend fun getPositions(): Result<PositionsResponse> {
+        return RestAPIClient.callAPI("positions") {
+            apiService.getPositions()
         }
     }
 }

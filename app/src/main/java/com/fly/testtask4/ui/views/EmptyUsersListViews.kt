@@ -27,9 +27,7 @@ import com.fly.testtask4.R
 
 /** Views that will shown if no users loaded */
 @Composable
-fun EmptyUsersListViews(
-    onUsersClick: () -> Unit, onSignUpClick: () -> Unit
-) {
+fun EmptyUsersListViews() {
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -82,7 +80,5 @@ fun EmptyUsersListViews(
                 )
             }
         }
-
-        CustomBottomNavigation(onUsersClick = onUsersClick, onSignUpClick = onSignUpClick)
     }
 }

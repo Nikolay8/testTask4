@@ -41,7 +41,7 @@ fun TestTaskApp(
     viewModel: TestTaskViewModel = viewModel(),
     navController: NavHostController = rememberNavController(),
     apiRepository: ApiRepository,
-    finishApp: () -> Unit,
+    uploadPhotoClick: () -> Unit
 ) {
 
     LaunchedEffect(key1 = Unit) {
@@ -94,8 +94,15 @@ fun TestTaskApp(
                         onNextButtonClicked = {
 
                         },
-                        onUsersClick = {},
-                        onSignUpClick = {},
+                        onUsersClick = {
+                            navController.navigate(AppScreen.InternetErrorScreen.name)
+                        },
+                        onSignUpClick = {
+                            navController.navigate(AppScreen.UsersScreen.name)
+                        },
+                        uploadPhotoClick = {
+                            uploadPhotoClick.invoke()
+                        },
                         onErrorAction = {},
                         viewModel = viewModel
                     )
