@@ -19,7 +19,7 @@ class MainActivity : ComponentActivity() {
 
     companion object {
         const val MAX_IMAGE_SIZE_KB = 5120
-        const val IMAGE_SIZE = 1080
+        const val IMAGE_SIZE = 500
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -52,7 +52,12 @@ class MainActivity : ComponentActivity() {
             .maxResultSize(
                 width = IMAGE_SIZE,
                 height = IMAGE_SIZE
-            )  //Final image resolution will be less than 1080 x 1080
+            )  //Final image resolution will be less than 500 x 500
+            .galleryMimeTypes(
+                mimeTypes = arrayOf(
+                    "image/jpg", "image/jpeg"
+                )
+            )
             .createIntent { intent ->
                 startForProfileImageResult.launch(intent)
             }

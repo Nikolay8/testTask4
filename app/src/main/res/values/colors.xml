@@ -7,4 +7,5 @@
     <color name="grey_color">#f8f8f8</color>
     <color name="grey_color_text">#636363</color>
     <color name="grey_divider">#e0e0e0</color>
+    <color name="grey_border_color">#D0CFCF</color>
 </resources>

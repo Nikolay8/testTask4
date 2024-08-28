@@ -3,6 +3,7 @@ agp = "8.4.1"
 coilCompose = "2.4.0"
 imagepicker = "2.1"
 imagepickerplus = "1.0.3'"
+imagepickerSupport = "1.7.1"
 imagePickerVersion = "v1.0.3"
 kotlin = "1.9.0"
 coreKtx = "1.13.1"
@@ -19,6 +20,7 @@ androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = 
 coil-compose = { module = "io.coil-kt:coil-compose", version.ref = "coilCompose" }
 image-picker = { module = "com.github.colourmoon:image-picker", version.ref = "imagePickerVersion" }
 imagepicker = { module = "com.github.dhaval2404:imagepicker", version.ref = "imagepicker" }
+imagepicker-support = { module = "com.github.dhaval2404:imagepicker-support", version.ref = "imagepickerSupport" }
 imagepickerplus = { module = "com.github.Andrew0000:ImagePickerPlus", version.ref = "imagepickerplus" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }

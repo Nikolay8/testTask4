@@ -39,5 +39,5 @@ data class TestTaskUiState(
     val position: Position = Position(id = 0, name = ""),
 
     /** User photo for upload */
-    val photoUri: Uri? = null
+    val photoUri: String? = null
     )

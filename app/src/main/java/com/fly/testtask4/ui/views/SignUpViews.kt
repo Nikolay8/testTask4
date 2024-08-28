@@ -19,7 +19,9 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.RadioButton
 import androidx.compose.material3.RadioButtonColors
 import androidx.compose.material3.Text
@@ -33,6 +35,7 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.stringResource
@@ -47,19 +50,23 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.MutableLiveData
 import com.fly.testtask4.R
+import com.fly.testtask4.data.UserModel
 import com.fly.testtask4.network.Result
 import com.fly.testtask4.network.model.PositionsResponse
 import com.fly.testtask4.ui.TestTaskViewModel
 import com.fly.testtask4.ui.theme.TestTask4Theme
 import com.fly.testtask4.util.NanpVisualTransformation
+import okhttp3.ResponseBody
 
 /** Views that will shown for signup flow */
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SignUpViews(
     viewModel: TestTaskViewModel, uploadPhotoAction: () -> Unit, onErrorAction: () -> Unit
 ) {
     // Get the current LifecycleOwner
     val lifecycleOwner = LocalLifecycleOwner.current
+    val context = LocalContext.current
 
     // Collect the UI state from the ViewModel
     val uiState by viewModel.uiState.collectAsState()
@@ -119,6 +126,12 @@ fun SignUpViews(
 
         // Name text field
         OutlinedTextField(
+            colors = OutlinedTextFieldDefaults.colors(
+                focusedLabelColor = colorResource(id = R.color.grey_border_color),
+                focusedBorderColor = colorResource(id = R.color.grey_border_color),
+                unfocusedBorderColor = colorResource(id = R.color.grey_border_color),
+                focusedTextColor = colorResource(id = R.color.grey_color_text),
+            ),
             modifier = Modifier
                 .padding(horizontal = 16.dp)
                 .padding(top = 20.dp)
@@ -136,6 +149,12 @@ fun SignUpViews(
 
         // Email text field
         OutlinedTextField(
+            colors = OutlinedTextFieldDefaults.colors(
+                focusedLabelColor = colorResource(id = R.color.grey_border_color),
+                focusedBorderColor = colorResource(id = R.color.grey_border_color),
+                unfocusedBorderColor = colorResource(id = R.color.grey_border_color),
+                focusedTextColor = colorResource(id = R.color.grey_color_text),
+            ),
             modifier = Modifier
                 .padding(horizontal = 16.dp)
                 .padding(top = 10.dp)
@@ -153,6 +172,12 @@ fun SignUpViews(
 
         // Phone text field
         OutlinedTextField(
+            colors = OutlinedTextFieldDefaults.colors(
+                focusedLabelColor = colorResource(id = R.color.grey_border_color),
+                focusedBorderColor = colorResource(id = R.color.grey_border_color),
+                unfocusedBorderColor = colorResource(id = R.color.grey_border_color),
+                focusedTextColor = colorResource(id = R.color.grey_color_text),
+            ),
             modifier = Modifier
                 .padding(horizontal = 16.dp)
                 .padding(top = 10.dp)
@@ -243,6 +268,12 @@ fun SignUpViews(
                 .padding(horizontal = 16.dp)
                 .padding(top = 10.dp)
                 .fillMaxWidth(),
+                colors = OutlinedTextFieldDefaults.colors(
+                    focusedLabelColor = colorResource(id = R.color.grey_border_color),
+                    focusedBorderColor = colorResource(id = R.color.grey_border_color),
+                    unfocusedBorderColor = colorResource(id = R.color.grey_border_color),
+                    focusedTextColor = colorResource(id = R.color.grey_color_text),
+                ),
                 supportingText = {
                     if (uiState.isPhotoError) {
                         Text(stringResource(id = R.string.photo_error))
@@ -280,7 +311,48 @@ fun SignUpViews(
                 .wrapContentWidth()
                 .align(Alignment.CenterHorizontally),
             onClick = {
-                viewModel.validateInsertedData()
+                if (viewModel.validateInsertedData()) {
+                    // MutableLiveData for get token
+                    val responseMutableLiveData = MutableLiveData<Result<ResponseBody>>()
+
+                    val photoUri = uiState.photoUri ?: return@Button
+
+                    // Create model for request
+                    val signUpUserModel = UserModel(
+                        id = 0,
+                        name = uiState.name,
+                        email = uiState.email,
+                        phone = "38" + uiState.phone,
+                        positionId = uiState.position.id,
+                        position = uiState.position.name,
+                        photo = photoUri,
+                        registrationTimestamp = 0
+                    )
+
+                    // Handleing sign up flows
+                    responseMutableLiveData.observe(lifecycleOwner) { positionResponse ->
+                        when (positionResponse) {
+                            is Result.Success -> {
+                                //TODO Handle sign up success
+                            }
+
+                            is Result.Error -> {
+                                //TODO Handle sign up error
+                            }
+
+                            else -> {
+                                // Other cases are not handled explicitly
+                            }
+                        }
+                    }
+
+                    // Call get token request
+                    viewModel.signUpNewUserRequests(
+                        context = context,
+                        responseMutableLiveData,
+                        signUpUser = signUpUserModel
+                    )
+                }
             },
             colors = ButtonDefaults.buttonColors(colorResource(id = R.color.yellow_main_color)),
             shape = RoundedCornerShape(30.dp),

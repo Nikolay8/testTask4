@@ -12,7 +12,7 @@
     <string name="email">Email</string>
     <string name="email_error">Invalid email format</string>
     <string name="phone">Phone</string>
-    <string name="phone_label">+38 (XXX) XXX - XX - XX</string>
+    <string name="phone_label">+38 (0XX) XXX - XX - XX</string>
     <string name="select_your_position">Select your position</string>
     <string name="position1_front_dev">Frontend developer</string>
     <string name="position2_back_dev">Backend developer</string>

@@ -14,7 +14,7 @@ import kotlinx.parcelize.Parcelize
  * @property position The user's position in the company.
  * @property positionId Unique identifier for the user's position.
  * @property registrationTimestamp Unix timestamp representing the user's registration date.
- * @property photo URL to the user's profile photo.
+ * @property photo String to the user's profile photo.
  */
 @Parcelize
 data class UserModel(

@@ -20,6 +20,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import okhttp3.ResponseBody
 
 class TestTaskViewModel(application: Application) : AndroidViewModel(application = application) {
 
@@ -79,6 +80,53 @@ class TestTaskViewModel(application: Application) : AndroidViewModel(application
         }
     }
 
+    /**
+     * Initiates the sign-up process for a new user by first retrieving an authorization token and then sending
+     * the user data to the server.
+     *
+     * This function works asynchronously using `viewModelScope` and `launch` to handle the process:
+     * 1. It first retrieves an authorization token using the `apiRepository.getToken()` function.
+     * 2. If the token retrieval is successful, the function proceeds to send the user data (`signUpUser`)
+     *    to the server using the `apiRepository.setUser()` function.
+     * 3. The result of the user sign-up request is posted to `responseMutableLiveData`.
+     * 4. In case of an error during token retrieval, the error is posted to `responseMutableLiveData`.
+     *
+     * @param context The context used for making network requests.
+     * @param responseMutableLiveData A `MutableLiveData` object used to post the result of the sign-up process,
+     *                                either success or error.
+     * @param signUpUser The user data (`UserModel`) that needs to be signed up.
+     */
+    fun signUpNewUserRequests(
+        context: Context,
+        responseMutableLiveData: MutableLiveData<Result<ResponseBody>>,
+        signUpUser: UserModel
+    ) {
+        viewModelScope.launch {
+            when (val tokenResponse = apiRepository.getToken()) {
+                is Result.Success -> {
+                    if (tokenResponse.data.success) {
+                        val token = tokenResponse.data.token
+
+                        responseMutableLiveData.value =
+                            apiRepository.setUser(
+                                context = context,
+                                token = token,
+                                userModel = signUpUser
+                            )
+                    }
+                }
+
+                is Result.Error -> {
+                    responseMutableLiveData.value = tokenResponse
+                }
+
+                else -> {
+
+                }
+            }
+        }
+    }
+
     /** Set list of positions to uiState */
     fun setPositionsList(positions: List<Position>) {
         _uiState.update { currentState ->
@@ -115,14 +163,15 @@ class TestTaskViewModel(application: Application) : AndroidViewModel(application
     }
 
     /** Set user photo to uiState */
-    fun setSignUpUserPhotoUri(phone: Uri) {
+    fun setSignUpUserPhotoUri(photo: Uri) {
         _uiState.update { currentState ->
-            currentState.copy(photoUri = phone)
+            currentState.copy(photoUri = photo.toString())
         }
     }
 
-    /** Validate all fields that required to sign up new user */
-    fun validateInsertedData() {
+    /** Validate all fields that required to sign up new user
+     *  If all validate passed will return true*/
+    fun validateInsertedData(): Boolean {
         // Validate name
         val isNameError = uiState.value.name.isEmpty()
 
@@ -132,9 +181,10 @@ class TestTaskViewModel(application: Application) : AndroidViewModel(application
             uiState.value.email.isEmpty() || !uiState.value.email.matches(emailPattern.toRegex())
 
         // Validate phone
-        val phonePattern = """d{10}"""
         val isPhoneError =
-            uiState.value.phone.isEmpty() || uiState.value.phone.length != 10
+            uiState.value.phone.isEmpty()
+                    || uiState.value.phone.length != 10
+                    || !uiState.value.phone.startsWith("0")
 
         // Validate photo
         val isPhotoError = uiState.value.photoUri == null
@@ -147,5 +197,7 @@ class TestTaskViewModel(application: Application) : AndroidViewModel(application
                 isPhotoError = isPhotoError
             )
         }
+
+        return !(isNameError || isEmailError || isPhoneError || isPhotoError)
     }
 }

@@ -1,6 +1,7 @@
 package com.fly.testtask4.ui.screens
 
 import android.app.Application
+import android.net.Uri
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -374,7 +375,7 @@ fun UsersEmptyScreenPrev() {
                 phone = "+38090606060",
                 positionId = 15515151,
                 registrationTimestamp = 1537777441,
-                photo = "https://frontend-test-assignment-api.abz.agency/images/users/5b977ba13fb3330.jpeg",
+                photo = "",
                 position = "Manager"
             ), UserModel(
                 id = 30,
@@ -383,7 +384,7 @@ fun UsersEmptyScreenPrev() {
                 phone = "+38090606060",
                 positionId = 15515151,
                 registrationTimestamp = 1537777441,
-                photo = "https://frontend-test-assignment-api.abz.agency/images/users/5b977ba13fb3330.jpeg",
+                photo = "",
                 position = "Manager"
             )
         )
