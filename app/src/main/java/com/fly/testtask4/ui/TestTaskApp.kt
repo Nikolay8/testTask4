@@ -123,12 +123,16 @@ fun TestTaskApp(
                     exitTransition()
                 }) {
                     BackHandler(true) {
-                        navController.navigate(AppScreen.UsersScreen.name)
+                        navController.navigate(AppScreen.LaunchScreen.name) {
+                            popUpTo(AppScreen.LaunchScreen.name) { inclusive = true }
+                        }
                     }
 
                     SignUpSuccessScreen(
                         onNextButtonClicked = {
-                            navController.navigate(AppScreen.UsersScreen.name)
+                            navController.navigate(AppScreen.LaunchScreen.name) {
+                                popUpTo(AppScreen.LaunchScreen.name) { inclusive = true }
+                            }
                         },
                         viewModel = viewModel
                     )
