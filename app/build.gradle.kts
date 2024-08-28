@@ -79,12 +79,6 @@ dependencies {
     // Retrofit
     implementation(libs.retrofit)
     implementation(libs.converter.gson)
-    implementation(libs.picasso)
-
-    // Moshi
-    implementation(libs.converter.moshi)
-    implementation(libs.moshi)
-    implementation(libs.moshi.kotlin)
 
     // Chucker
     debugImplementation(libs.library)
