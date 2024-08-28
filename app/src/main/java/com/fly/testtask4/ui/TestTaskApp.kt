@@ -1,5 +1,6 @@
 package com.fly.testtask4.ui
 
+import android.app.Activity
 import androidx.activity.compose.BackHandler
 import androidx.compose.animation.AnimatedContentTransitionScope
 import androidx.compose.animation.EnterTransition
@@ -26,6 +27,8 @@ import com.fly.testtask4.R
 import com.fly.testtask4.network.repository.ApiRepository
 import com.fly.testtask4.ui.screens.InternetErrorScreen
 import com.fly.testtask4.ui.screens.LaunchScreen
+import com.fly.testtask4.ui.screens.SignUpErrorScreen
+import com.fly.testtask4.ui.screens.SignUpSuccessScreen
 import com.fly.testtask4.ui.screens.UsersScreen
 import com.fly.testtask4.ui.theme.TestTask4Theme
 
@@ -33,11 +36,12 @@ import com.fly.testtask4.ui.theme.TestTask4Theme
  * enum values that represent the screens in the app
  */
 enum class AppScreen {
-    LaunchScreen, InternetErrorScreen, UsersScreen
+    LaunchScreen, InternetErrorScreen, UsersScreen, SignUpSuccessScreen, SignUpErrorScreen
 }
 
 @Composable
 fun TestTaskApp(
+    activity: Activity,
     viewModel: TestTaskViewModel = viewModel(),
     navController: NavHostController = rememberNavController(),
     apiRepository: ApiRepository,
@@ -88,12 +92,11 @@ fun TestTaskApp(
                     exitTransition()
                 }) {
                     // Disable back press
-                    BackHandler(true) {}
+                    BackHandler(true) {
+                        activity.finish()
+                    }
 
                     UsersScreen(
-                        onNextButtonClicked = {
-
-                        },
                         onUsersClick = {
                             navController.navigate(AppScreen.InternetErrorScreen.name)
                         },
@@ -103,7 +106,48 @@ fun TestTaskApp(
                         uploadPhotoClick = {
                             uploadPhotoClick.invoke()
                         },
-                        onErrorAction = {},
+                        onSuccessSingUp = {
+                            navController.navigate(AppScreen.SignUpSuccessScreen.name)
+                        },
+                        onErrorSingUp = {
+                            navController.navigate(AppScreen.SignUpErrorScreen.name)
+                        },
+                        viewModel = viewModel
+                    )
+                }
+
+                // Success sign up screen
+                composable(route = AppScreen.SignUpSuccessScreen.name, enterTransition = {
+                    enterTransition()
+                }, exitTransition = {
+                    exitTransition()
+                }) {
+                    BackHandler(true) {
+                        navController.navigate(AppScreen.UsersScreen.name)
+                    }
+
+                    SignUpSuccessScreen(
+                        onNextButtonClicked = {
+                            navController.navigate(AppScreen.UsersScreen.name)
+                        },
+                        viewModel = viewModel
+                    )
+                }
+
+                // Error sign up screen
+                composable(route = AppScreen.SignUpErrorScreen.name, enterTransition = {
+                    enterTransition()
+                }, exitTransition = {
+                    exitTransition()
+                }) {
+                    BackHandler(true) {
+                        navController.popBackStack()
+                    }
+
+                    SignUpErrorScreen(
+                        onBackPressed = {
+                            navController.popBackStack()
+                        },
                         viewModel = viewModel
                     )
                 }

@@ -7,7 +7,7 @@ import com.fly.testtask4.network.Result
 import com.fly.testtask4.network.model.GetTokenResponse
 import com.fly.testtask4.network.model.GetUsersResponse
 import com.fly.testtask4.network.model.PositionsResponse
-import okhttp3.ResponseBody
+import com.fly.testtask4.network.model.SetUserResponse
 
 /**
  *  Repository for Api requests
@@ -18,7 +18,9 @@ interface ApiRepository {
     suspend fun getUsers(page: Int, count: Int): Result<GetUsersResponse>
 
     /** Register new user */
-    suspend fun setUser(context: Context, token: String, userModel: UserModel): Result<ResponseBody>
+    suspend fun setUser(
+        context: Context, token: String, userModel: UserModel
+    ): Result<SetUserResponse>
 
     /** Get positions for sign up new user */
     suspend fun getPositions(): Result<PositionsResponse>

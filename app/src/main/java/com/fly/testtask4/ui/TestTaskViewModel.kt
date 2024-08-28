@@ -11,16 +11,17 @@ import androidx.lifecycle.viewModelScope
 import com.fly.testtask4.data.Position
 import com.fly.testtask4.data.TestTaskUiState
 import com.fly.testtask4.data.UserModel
+import com.fly.testtask4.network.ResponseException
 import com.fly.testtask4.network.Result
 import com.fly.testtask4.network.model.GetUsersResponse
 import com.fly.testtask4.network.model.PositionsResponse
+import com.fly.testtask4.network.model.SetUserResponse
 import com.fly.testtask4.network.repository.ApiRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import okhttp3.ResponseBody
 
 class TestTaskViewModel(application: Application) : AndroidViewModel(application = application) {
 
@@ -97,8 +98,7 @@ class TestTaskViewModel(application: Application) : AndroidViewModel(application
      * @param signUpUser The user data (`UserModel`) that needs to be signed up.
      */
     fun signUpNewUserRequests(
-        context: Context,
-        responseMutableLiveData: MutableLiveData<Result<ResponseBody>>,
+        context: Context, responseMutableLiveData: MutableLiveData<Result<SetUserResponse>>,
         signUpUser: UserModel
     ) {
         viewModelScope.launch {
@@ -107,21 +107,54 @@ class TestTaskViewModel(application: Application) : AndroidViewModel(application
                     if (tokenResponse.data.success) {
                         val token = tokenResponse.data.token
 
-                        responseMutableLiveData.value =
-                            apiRepository.setUser(
-                                context = context,
-                                token = token,
-                                userModel = signUpUser
-                            )
+                        signUpApi(
+                            context = context,
+                            token = token,
+                            responseMutableLiveData = responseMutableLiveData,
+                            signUpUser = signUpUser
+                        )
                     }
                 }
 
                 is Result.Error -> {
-                    responseMutableLiveData.value = tokenResponse
+                    responseMutableLiveData.value =
+                        Result.Error(exception = ResponseException(cause = Exception()))
                 }
 
                 else -> {
 
+                }
+            }
+        }
+    }
+
+    /** Process signUpUser API */
+    private fun signUpApi(
+        context: Context,
+        token: String,
+        responseMutableLiveData: MutableLiveData<Result<SetUserResponse>>,
+        signUpUser: UserModel
+    ) {
+        viewModelScope.launch {
+            when (val signUpResponse = apiRepository.setUser(
+                context = context,
+                token = token,
+                userModel = signUpUser
+            )) {
+                // Success case
+                is Result.Success -> {
+                    if (signUpResponse.data.success) {
+                        responseMutableLiveData.value = signUpResponse
+                    } else {
+                        responseMutableLiveData.value =
+                            Result.Error(exception = ResponseException(cause = Exception()))
+                    }
+                }
+
+                // Error case
+                else -> {
+                    responseMutableLiveData.value =
+                        Result.Error(exception = ResponseException(cause = Exception()))
                 }
             }
         }

@@ -3,9 +3,9 @@ package com.fly.testtask4.network.api
 import com.fly.testtask4.network.model.GetTokenResponse
 import com.fly.testtask4.network.model.GetUsersResponse
 import com.fly.testtask4.network.model.PositionsResponse
+import com.fly.testtask4.network.model.SetUserResponse
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
-import okhttp3.ResponseBody
 import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Header
@@ -32,7 +32,7 @@ interface ApiService {
         @Part("phone") phone: RequestBody,
         @Part("position_id") positionId: RequestBody,
         @Part photo: MultipartBody.Part
-    ): Response<ResponseBody>
+    ): Response<SetUserResponse>
 
     @GET("positions")
     suspend fun getPositions(): Response<PositionsResponse>

@@ -1,7 +1,7 @@
 package com.fly.testtask4.ui.screens
 
 import android.app.Application
-import android.net.Uri
+import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -34,6 +34,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.stringResource
@@ -70,16 +71,15 @@ import com.fly.testtask4.ui.views.SignUpViews
  * @param onNextButtonClicked Callback invoked when the next button is clicked.
  * @param onUsersClick Callback invoked when a user item is clicked.
  * @param onSignUpClick Callback invoked when the sign-up button is clicked.
- * @param onErrorAction Callback invoked when an error action is triggered.
+ * @param onSuccessSingUp Callback invoked when an success sign up triggered.
+ * @param onErrorSingUp Callback invoked when an error sign up triggered.
  * @param viewModel The ViewModel that provides the UI state and handles business logic for this screen.
  */
 @Composable
 fun UsersScreen(
-    onNextButtonClicked: () -> Unit,
     onUsersClick: () -> Unit,
     onSignUpClick: () -> Unit,
-    uploadPhotoClick: () -> Unit,
-    onErrorAction: () -> Unit,
+    uploadPhotoClick: () -> Unit, onSuccessSingUp: () -> Unit, onErrorSingUp: () -> Unit,
     viewModel: TestTaskViewModel
 ) {
 
@@ -87,6 +87,8 @@ fun UsersScreen(
     val lifecycleOwner = LocalLifecycleOwner.current
     // Collect the UI state from the ViewModel
     val uiState by viewModel.uiState.collectAsState()
+    val context = LocalContext.current
+    val defaultErrorString = stringResource(id = R.string.default_error)
 
     var isShowSignUpScreen by remember {
         mutableStateOf(false)
@@ -143,13 +145,8 @@ fun UsersScreen(
                     }
                 }
 
-                is Result.Error -> {
-                    // Handle error by invoking the error callback
-                    onErrorAction.invoke()
-                }
-
                 else -> {
-                    // Other cases are not handled explicitly
+                    Toast.makeText(context, defaultErrorString, Toast.LENGTH_LONG).show()
                 }
             }
         }
@@ -170,8 +167,10 @@ fun UsersScreen(
             if (isShowSignUpScreen) {
                 SignUpViews(viewModel = viewModel, uploadPhotoAction = {
                     uploadPhotoClick.invoke()
-                }, onErrorAction = {
-
+                }, onSuccessSingUp = {
+                    onSuccessSingUp.invoke()
+                }, onErrorSingUp = {
+                    onErrorSingUp.invoke()
                 })
             } else {
                 // Based on uiState show empty user list views or lazyList with users info
@@ -392,11 +391,8 @@ fun UsersEmptyScreenPrev() {
         viewModel.setUserList(mockUserList)
 
         UsersScreen(
-            onNextButtonClicked = { },
             onUsersClick = {},
-            onSignUpClick = {},
-            uploadPhotoClick = {},
-            onErrorAction = {},
+            onSignUpClick = {}, uploadPhotoClick = {}, onSuccessSingUp = {}, onErrorSingUp = {},
             viewModel = viewModel
         )
     }

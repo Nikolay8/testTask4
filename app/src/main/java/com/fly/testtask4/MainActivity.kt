@@ -1,5 +1,7 @@
 package com.fly.testtask4
 
+import android.annotation.SuppressLint
+import android.content.pm.ActivityInfo
 import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.ComponentActivity
@@ -22,8 +24,10 @@ class MainActivity : ComponentActivity() {
         const val IMAGE_SIZE = 500
     }
 
+    @SuppressLint("SourceLockedOrientationActivity")
     override fun onCreate(savedInstanceState: Bundle?) {
         setTheme(R.style.Theme_TestTask4)
+        requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
         super.onCreate(savedInstanceState)
 
         testTaskViewModel = TestTaskViewModel(application)
@@ -31,6 +35,7 @@ class MainActivity : ComponentActivity() {
         setContent {
             TestTask4Theme {
                 TestTaskApp(
+                    activity = this,
                     viewModel = testTaskViewModel,
                     apiRepository = ApiRepositoryImpl(
                         apiService = ApiManager().provideApiService(

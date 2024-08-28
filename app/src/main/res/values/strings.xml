@@ -22,4 +22,8 @@
     <string name="photo_error">Photo is required</string>
     <string name="upload">Upload</string>
     <string name="task_cancelled">Task Cancelled</string>
+    <string name="user_register">User successfully registered</string>
+    <string name="got_it">Got it</string>
+    <string name="email_already_register">That email is already registered</string>
+    <string name="default_error">Something went wrong</string>
 </resources>

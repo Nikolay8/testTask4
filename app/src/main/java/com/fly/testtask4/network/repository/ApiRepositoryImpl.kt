@@ -9,10 +9,10 @@ import com.fly.testtask4.network.api.ApiService
 import com.fly.testtask4.network.model.GetTokenResponse
 import com.fly.testtask4.network.model.GetUsersResponse
 import com.fly.testtask4.network.model.PositionsResponse
+import com.fly.testtask4.network.model.SetUserResponse
 import com.fly.testtask4.util.InputStreamConverter
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.RequestBody.Companion.toRequestBody
-import okhttp3.ResponseBody
 
 class ApiRepositoryImpl(
     private val apiService: ApiService
@@ -25,7 +25,7 @@ class ApiRepositoryImpl(
 
     override suspend fun setUser(
         context: Context, token: String, userModel: UserModel
-    ): Result<ResponseBody> {
+    ): Result<SetUserResponse> {
 
         // Use InputStreamConverter for get the photo body
         val photoJPEGBody =

@@ -1,6 +1,7 @@
 package com.fly.testtask4.ui.views
 
 import android.app.Application
+import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -19,7 +20,6 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.RadioButton
@@ -53,16 +53,18 @@ import com.fly.testtask4.R
 import com.fly.testtask4.data.UserModel
 import com.fly.testtask4.network.Result
 import com.fly.testtask4.network.model.PositionsResponse
+import com.fly.testtask4.network.model.SetUserResponse
 import com.fly.testtask4.ui.TestTaskViewModel
 import com.fly.testtask4.ui.theme.TestTask4Theme
 import com.fly.testtask4.util.NanpVisualTransformation
-import okhttp3.ResponseBody
 
 /** Views that will shown for signup flow */
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SignUpViews(
-    viewModel: TestTaskViewModel, uploadPhotoAction: () -> Unit, onErrorAction: () -> Unit
+    viewModel: TestTaskViewModel,
+    uploadPhotoAction: () -> Unit,
+    onSuccessSingUp: () -> Unit,
+    onErrorSingUp: () -> Unit
 ) {
     // Get the current LifecycleOwner
     val lifecycleOwner = LocalLifecycleOwner.current
@@ -73,6 +75,7 @@ fun SignUpViews(
 
     var phoneNumber by rememberSaveable { mutableStateOf("") }
     val numericRegex = Regex("[^0-9]")
+    val defaultErrorString = stringResource(id = R.string.default_error)
 
     LaunchedEffect(key1 = Unit) {
         // MutableLiveData for get all positions for show in RadioButtons views
@@ -88,8 +91,7 @@ fun SignUpViews(
                 }
 
                 is Result.Error -> {
-                    // Handle error by invoking the error callback
-                    onErrorAction.invoke()
+                    Toast.makeText(context, defaultErrorString, Toast.LENGTH_LONG).show()
                 }
 
                 else -> {
@@ -313,7 +315,7 @@ fun SignUpViews(
             onClick = {
                 if (viewModel.validateInsertedData()) {
                     // MutableLiveData for get token
-                    val responseMutableLiveData = MutableLiveData<Result<ResponseBody>>()
+                    val responseMutableLiveData = MutableLiveData<Result<SetUserResponse>>()
 
                     val photoUri = uiState.photoUri ?: return@Button
 
@@ -329,19 +331,15 @@ fun SignUpViews(
                         registrationTimestamp = 0
                     )
 
-                    // Handleing sign up flows
-                    responseMutableLiveData.observe(lifecycleOwner) { positionResponse ->
-                        when (positionResponse) {
+                    // Handling sign up flows
+                    responseMutableLiveData.observe(lifecycleOwner) { response ->
+                        when (response) {
                             is Result.Success -> {
-                                //TODO Handle sign up success
-                            }
-
-                            is Result.Error -> {
-                                //TODO Handle sign up error
+                                onSuccessSingUp.invoke() // Success
                             }
 
                             else -> {
-                                // Other cases are not handled explicitly
+                                onErrorSingUp.invoke() // Error
                             }
                         }
                     }
@@ -378,6 +376,7 @@ fun SignUpViewsPrev() {
     TestTask4Theme {
         SignUpViews(viewModel = TestTaskViewModel(application = Application()),
             uploadPhotoAction = {},
-            onErrorAction = {})
+            onSuccessSingUp = {},
+            onErrorSingUp = {})
     }
 }
