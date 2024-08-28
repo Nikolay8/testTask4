@@ -1,6 +1,8 @@
 [versions]
 agp = "8.4.1"
 coilCompose = "2.4.0"
+constraintlayoutCompose = "1.0.1"
+converterMoshi = "2.9.0"
 imagepicker = "2.1"
 imagepickerplus = "1.0.3'"
 imagepickerSupport = "1.7.1"
@@ -10,14 +12,30 @@ coreKtx = "1.13.1"
 junit = "4.13.2"
 junitVersion = "1.2.1"
 espressoCore = "3.6.1"
+library = "4.0.0"
+libraryNoOp = "4.0.0"
+lifecycleRuntimeCompose = " 2.7.0"
 lifecycleRuntimeKtx = "2.8.4"
 activityCompose = "1.9.1"
 composeBom = "2023.08.00"
+material = "1.6.8"
+material3 = "1.2.1"
+moshi = "1.15.0"
+moshiKotlin = "1.15.0"
+navigationCompose = "2.7.7"
+picasso = "2.71828"
 repoVersion = "Tag"
 
 [libraries]
+androidx-constraintlayout-compose = { module = "androidx.constraintlayout:constraintlayout-compose", version.ref = "constraintlayoutCompose" }
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
+androidx-lifecycle-runtime-compose = { module = "androidx.lifecycle:lifecycle-runtime-compose", version.ref = "lifecycleRuntimeCompose" }
+androidx-lifecycle-viewmodel-compose = { module = "androidx.lifecycle:lifecycle-viewmodel-compose", version.ref = "lifecycleRuntimeKtx" }
+androidx-material = { module = "androidx.compose.material:material", version.ref = "material" }
+androidx-navigation-compose = { module = "androidx.navigation:navigation-compose", version.ref = "navigationCompose" }
 coil-compose = { module = "io.coil-kt:coil-compose", version.ref = "coilCompose" }
+converter-gson = { module = "com.squareup.retrofit2:converter-gson", version.ref = "converterMoshi" }
+converter-moshi = { module = "com.squareup.retrofit2:converter-moshi", version.ref = "converterMoshi" }
 image-picker = { module = "com.github.colourmoon:image-picker", version.ref = "imagePickerVersion" }
 imagepicker = { module = "com.github.dhaval2404:imagepicker", version.ref = "imagepicker" }
 imagepicker-support = { module = "com.github.dhaval2404:imagepicker-support", version.ref = "imagepickerSupport" }
@@ -35,6 +53,13 @@ androidx-ui-tooling-preview = { group = "androidx.compose.ui", name = "ui-toolin
 androidx-ui-test-manifest = { group = "androidx.compose.ui", name = "ui-test-manifest" }
 androidx-ui-test-junit4 = { group = "androidx.compose.ui", name = "ui-test-junit4" }
 androidx-material3 = { group = "androidx.compose.material3", name = "material3" }
+library = { module = "com.github.chuckerteam.chucker:library", version.ref = "library" }
+library-no-op = { module = "com.github.chuckerteam.chucker:library-no-op", version.ref = "libraryNoOp" }
+material3 = { module = "androidx.compose.material3:material3", version.ref = "material3" }
+moshi = { module = "com.squareup.moshi:moshi", version.ref = "moshi" }
+moshi-kotlin = { module = "com.squareup.moshi:moshi-kotlin", version.ref = "moshiKotlin" }
+picasso = { module = "com.squareup.picasso:picasso", version.ref = "picasso" }
+retrofit = { module = "com.squareup.retrofit2:retrofit", version.ref = "converterMoshi" }
 user-repo = { module = "com.github.User:Repo", version.ref = "repoVersion" }
 
 [plugins]

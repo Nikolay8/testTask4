@@ -68,43 +68,27 @@ dependencies {
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
 
-    //noinspection UseTomlInstead
-    implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.8.4")
-    //noinspection UseTomlInstead
-    implementation("androidx.constraintlayout:constraintlayout-compose:1.0.1")
-    //noinspection UseTomlInstead
-    implementation("androidx.compose.material3:material3:1.2.1")
+    implementation(libs.androidx.lifecycle.viewmodel.compose)
+    implementation(libs.androidx.constraintlayout.compose)
+    implementation(libs.material3)
     // Lifecycle utilities for Compose
-    //noinspection UseTomlInstead
-    implementation("androidx.lifecycle:lifecycle-runtime-compose: 2.7.0")
-    //noinspection UseTomlInstead
-    implementation("androidx.navigation:navigation-compose:2.7.7")
-    //noinspection UseTomlInstead
-    implementation("androidx.compose.material:material:1.0.0")
+    implementation(libs.androidx.lifecycle.runtime.compose)
+    implementation(libs.androidx.navigation.compose)
+    implementation(libs.androidx.material)
 
     // Retrofit
-    //noinspection UseTomlInstead
-    implementation("com.squareup.retrofit2:retrofit:2.9.0")
-    //noinspection UseTomlInstead
-    implementation("com.squareup.retrofit2:converter-gson:2.9.0")
-    //noinspection UseTomlInstead
-    implementation("com.squareup.picasso:picasso:2.71828")
-
+    implementation(libs.retrofit)
+    implementation(libs.converter.gson)
+    implementation(libs.picasso)
 
     // Moshi
-    //noinspection UseTomlInstead
-    implementation("com.squareup.retrofit2:converter-moshi:2.9.0")
-    //noinspection UseTomlInstead
-    implementation("com.squareup.moshi:moshi:1.15.0")
-    //noinspection UseTomlInstead
-    implementation("com.squareup.moshi:moshi-kotlin:1.15.0")
-    //noinspection UseTomlInstead
+    implementation(libs.converter.moshi)
+    implementation(libs.moshi)
+    implementation(libs.moshi.kotlin)
 
     // Chucker
-    //noinspection UseTomlInstead
-    debugImplementation("com.github.chuckerteam.chucker:library:4.0.0")
-    //noinspection UseTomlInstead
-    releaseImplementation("com.github.chuckerteam.chucker:library-no-op:4.0.0")
+    debugImplementation(libs.library)
+    releaseImplementation(libs.library.no.op)
 
     // Coil
     implementation(libs.coil.compose)
